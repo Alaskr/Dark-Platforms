@@ -840,12 +840,24 @@ class GameView(arcade.View):
                                                 self.do_touch_list):
 
             # if you beat the last level
-            if self.level >= 4:
+            if self.level == 4:
                 view = GameWinView()
                 self.window.show_view(view)
 
             # Advance to the next level
-            if self.level <=4:
+            if self.level == 1:
+                self.level += 1
+
+                # Load the next level
+                self.setup(self.level)
+
+            if self.level == 2:
+                self.level += 1
+
+                # Load the next level
+                self.setup(self.level)
+
+            if self.level == 3:
                 self.level += 1
 
                 # Load the next level
