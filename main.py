@@ -87,9 +87,11 @@ class InstructionView(arcade.View):
         """ Draw this view """
         arcade.start_render()
 
-        arcade.draw_text("Light Maze", self.window.width / 2, self.window.height / 2,
+        arcade.draw_text("The Dark Platforms", self.window.width / 2, self.window.height / 2,
                          arcade.color.WHITE, font_size=50, anchor_x="center")
         arcade.draw_text("Click To Play", self.window.width / 2, self.window.height / 2 - 75,
+                         arcade.color.WHITE, font_size=20, anchor_x="center")
+        arcade.draw_text("This Game is quite hard (prepare to take on my challenge)", self.window.width / 2, self.window.height / 2 - 355,
                          arcade.color.WHITE, font_size=20, anchor_x="center")
 
 
@@ -122,11 +124,82 @@ class GameOverView(arcade.View):
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
                                 SCREEN_WIDTH, SCREEN_HEIGHT)
 
+        # takes you to menu
         if self.selected == 1:
             arcade.draw_text("Menu", 485, 285, arcade.csscolor.WHITE, 75)
         else:
             arcade.draw_text("Menu", 500, 300, arcade.csscolor.WHITE, 50)
 
+        # takes you to quit the game
+        if self.selected == 2:
+            arcade.draw_text("Quit", 505, 215, arcade.csscolor.WHITE, 75)
+        else:
+            arcade.draw_text("Quit", 520, 230, arcade.csscolor.WHITE, 50)
+
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed. """
+
+        # selection keys
+        if key == arcade.key.ENTER:
+            if self.selected == 1:
+                game_view = InstructionView()
+                self.window.show_view(game_view)
+            elif self.selected == 2:
+                arcade.close_window()
+        if key == arcade.key.DOWN:
+            self.selected += 1
+            if self.selected > 2:
+                self.selected = 1
+        if key == arcade.key.UP:
+            self.selected -= 1
+            if self.selected < 1:
+                self.selected = 2
+
+    # mouse click and motion tracking for selection
+    def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
+        if 285 <= y <= 285 + 75 and 450 <= x <= 450 + 200:
+            self.selected = 1
+        elif 230 <= y <= 230 + 75 and 500 <= x <= 500 + 200:
+            self.selected = 2
+
+    def on_mouse_press(self, x: float, y: float, button: int, modifiers: int):
+        if 285 <= y <= 285 + 75 and 450 <= x <= 450 + 200:
+            game_view = InstructionView()
+            self.window.show_view(game_view)
+        elif 230 <= y <= 230 + 75 and 500 <= x <= 500 + 200:
+            arcade.close_window()
+
+class GameWinView(arcade.View):
+    """ View to show when game is won """
+
+    def __init__(self):
+        """ This is run once when we switch to this view """
+        super().__init__()
+        self.texture = arcade.load_texture("Assets/gamescreen.png")
+
+        # Reset the viewport, necessary if we have a scrolling game and we need
+        # to reset the viewport back to the start so we can see what we draw.
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+        self.selected = 1
+
+    def on_draw(self):
+        """ Draw this view """
+        arcade.start_render()
+
+        arcade.draw_text("You Beat The Game You must be good!", 485, 300, arcade.csscolor.WHITE, 75)
+
+        arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
+
+        self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
+                                SCREEN_WIDTH, SCREEN_HEIGHT)
+
+        # takes you to menu
+        if self.selected == 1:
+            arcade.draw_text("Menu", 485, 285, arcade.csscolor.WHITE, 75)
+        else:
+            arcade.draw_text("Menu", 500, 300, arcade.csscolor.WHITE, 50)
+
+        # takes you to quit the game
         if self.selected == 2:
             arcade.draw_text("Quit", 505, 215, arcade.csscolor.WHITE, 75)
         else:
@@ -150,6 +223,7 @@ class GameOverView(arcade.View):
             if self.selected < 1:
                 self.selected = 2
 
+    # mouse click and motion tracking for selection
     def on_mouse_motion(self, x: float, y: float, dx: float, dy: float):
         if 285 <= y <= 285 + 75 and 450 <= x <= 450 + 200:
             self.selected = 1
@@ -254,32 +328,6 @@ class PlayerCharacter(arcade.Sprite):
         frame = self.cur_texture // UPDATES_PER_FRAME
         self.texture = self.walk_textures[frame][self.character_face_direction]
 
-
-class EnemySprite(arcade.Sprite):
-
-    def __init__(self, image_file, scale, power_list, time_between_firing):
-
-        super().__init__(image_file, scale)
-
-        self.time_since_last_firing = 0.0
-        self.time_between_firing = time_between_firing
-        self.power_list = power_list
-
-    def on_update(self, delta_time: float = 1 / 60):
-
-        self.time_since_last_firing += delta_time
-
-        if self.time_since_last_firing >= self.time_between_firing:
-
-            self.time_since_last_firing = 0
-
-            power = arcade.Sprite("Power1_1.png", POWER_SCALING)
-            power.center_x = self.center_x
-            power.angle = -90
-            power.top = self.bottom
-            power.change_y = -2
-            self.power_list.append(power)
-
 class GameView(arcade.View):
     """
     Main application class.
@@ -350,7 +398,7 @@ class GameView(arcade.View):
         self.game_over = arcade.load_sound("Assets/gameover1.mp3")
         self.gun_sound = arcade.load_sound("Assets/pew.mp3")
 
-        self.level = 3
+        self.level = 4
 
     def setup(self, level):
         """ Set up the game here. Call this function to restart the game. """
@@ -494,7 +542,6 @@ class GameView(arcade.View):
                                                              self.wall_list,
                                                              gravity_constant=GRAVITY,
                                                              ladders=self.ladder_list)
-
 
     def on_draw(self):
         """ Render the screen. """
@@ -641,7 +688,6 @@ class GameView(arcade.View):
         self.backgroundb_list.update_animation(delta_time)
         self.player_list.update_animation(delta_time)
         self.player_light.position = self.player_sprite.position
-        self.enemy_list.on_update(delta_time)
 
         # Update walls, used with moving platforms
         self.wall_list.update()
@@ -718,8 +764,6 @@ class GameView(arcade.View):
                                 self.view_bottom,
                                 SCREEN_HEIGHT + self.view_bottom)
 
-        self.power_list.update()
-
         obstacle_hit_list: list[Sprite] = arcade.check_for_collision_with_list(self.player_sprite,
                                                                                self.obstacle_list)
 
@@ -744,47 +788,6 @@ class GameView(arcade.View):
 
             obstacle.remove_from_sprite_lists()
             arcade.play_sound(self.activate_sound)
-
-        for power in self.power_list:
-
-            hit_list = arcade.check_for_collision_with_list(power, self.obstacle_list)
-            if len(hit_list) > 0:
-                power.remove_from_sprite_lists()
-
-            for obstacle in hit_list:
-                obstacle.remove_from_sprite_lists()
-
-            if power.bottom > SCREEN_WIDTH:
-                power.remove_from_sprite_lists()
-
-        for power in self.power_list:
-
-            hit_list = arcade.check_for_collision_with_list(power,
-                                                            self.enemy_list)
-            if len(hit_list) > 0:
-                power.remove_from_sprite_lists()
-
-            for enemy in hit_list:
-                enemy.remove_from_sprite_lists()
-
-            if power.bottom > SCREEN_WIDTH:
-                power.remove_from_sprite_lists()
-
-            if power.bottom > SCREEN_HEIGHT:
-                power.remove_from_sprite_lists()
-
-        for power in self.power_list:
-
-            hit_list = arcade.check_for_collision_with_list(power, self.coin_list)
-
-            if len(hit_list) > 0:
-                power.remove_from_sprite_lists()
-
-            for coin in hit_list:
-                coin.remove_from_sprite_lists()
-
-            if power.bottom > SCREEN_WIDTH:
-                power.remove_from_sprite_lists()
 
         # Did the player fall off the map?
         if self.player_sprite.center_y < -100:
@@ -836,11 +839,18 @@ class GameView(arcade.View):
         # See if the user got to the end of the level
         if arcade.check_for_collision_with_list(self.player_sprite,
                                                 self.do_touch_list):
-            # Advance to the next level
-            self.level += 1
 
-            # Load the next level
-            self.setup(self.level)
+            # if you beat the last level
+            if self.level >= 4:
+                view = GameWinView()
+                self.window.show_view(view)
+
+            # Advance to the next level
+            if self.level <=4:
+                self.level += 1
+
+                # Load the next level
+                self.setup(self.level)
 
             # Set the camera to the start
             self.view_left = 0
