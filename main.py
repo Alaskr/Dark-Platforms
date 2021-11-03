@@ -1,7 +1,6 @@
 import arcade
 import os
 import time
-import random
 
 from arcade import Sprite
 from arcade.experimental.lights import Light, LightLayer
@@ -9,7 +8,7 @@ from arcade.experimental.lights import Light, LightLayer
 # Constants
 SCREEN_WIDTH = 1280
 SCREEN_HEIGHT = 720
-SCREEN_TITLE = "Light Maze"
+SCREEN_TITLE = "The Dark Platforms"
 
 # Constants used to scale our sprites from their original size
 TILE_SCALING = 2
