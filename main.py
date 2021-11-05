@@ -59,6 +59,9 @@ duration = int(end_time - start_time)
 time_limit = 5
 plight = 1
 
+#levels
+LEVELS = 4
+
 def load_texture_pair(filename):
     """
     Load a texture pair, with the second being a mirror image.
@@ -839,58 +842,21 @@ class GameView(arcade.View):
         if arcade.check_for_collision_with_list(self.player_sprite,
                                                 self.do_touch_list):
 
-            # if you beat the last level
-            if self.level == 4:
-                view = GameWinView()
-                self.window.show_view(view)
-
             # Advance to the next level
-            if self.level == 1:
-                self.level += 1
+            self.level += 1
 
-                # Load the next level
-                self.setup(self.level)
-
-            if self.level == 2:
-                self.level += 1
-
-                # Load the next level
-                self.setup(self.level)
-
-            if self.level == 3:
-                self.level += 1
-
-                # Load the next level
+            # Load the next level
+            if self.level > LEVELS:
+                view = GameOverView()
+                self.level = LEVELS
+                self.window.show_view(view)
+            else:
                 self.setup(self.level)
 
             # Set the camera to the start
             self.view_left = 0
             self.view_bottom = 0
             changed_viewport = True
-
-        # Update the player based on the physics engine
-        if not self.game_over:
-            # Move the enemies
-            self.enemy_list.update()
-
-            # Check each enemy
-            for enemy in self.enemy_list:
-                # If the enemy hit a wall, reverse
-                if len(arcade.check_for_collision_with_list(enemy, self.wall_list)) > 0:
-                    enemy.change_x *= -1
-                # If the enemy hit the left boundary, reverse
-                elif enemy.boundary_left is not None and enemy.left < enemy.boundary_left:
-                    enemy.change_x *= -1
-                # If the enemy hit the right boundary, reverse
-                elif enemy.boundary_right is not None and enemy.right > enemy.boundary_right:
-                    enemy.change_x *= -1
-
-            # Update the player using the physics engine
-            self.physics_engine.update()
-
-            # See if the player hit a worm. If so, game over.
-            if len(arcade.check_for_collision_with_list(self.player_sprite, self.enemy_list)) > 0:
-                self.game_over = True
 
 def main():
     """ Main method """
