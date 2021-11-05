@@ -367,7 +367,6 @@ class GameView(arcade.View):
         self.power_list = None
         self.dont_touch_list = None
         self.lava_list = None
-        self.breakable_list = None
         self.do_touch_list = None
 
         # lights
@@ -527,11 +526,6 @@ class GameView(arcade.View):
                                                       TILE_SCALING,
                                                       use_spatial_hash=True)
 
-        self.breakable_list = arcade.tilemap.process_layer(my_map,
-                                                           "breakable",
-                                                           TILE_SCALING,
-                                                           use_spatial_hash=True)
-
         # --- Other stuff
         # Set the background color
         if my_map.background_color:
@@ -562,7 +556,6 @@ class GameView(arcade.View):
             self.lava_list.draw()
             self.decor_list.draw()
             self.wall_list.draw()
-            self.breakable_list.draw()
 
         self.light_layer.draw(ambient_color=AMBIENT_COLOR)
         if self.score == 4:
