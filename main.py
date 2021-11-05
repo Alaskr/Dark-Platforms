@@ -391,13 +391,13 @@ class GameView(arcade.View):
         self.score = 0
 
         # Load sounds
-        self.collect_coin_sound = arcade.load_sound("Assets/coin1.mp3")
-        self.activate_sound = arcade.load_sound("Assets/coin1.mp3")
+        self.collect_coin_sound = arcade.load_sound("Assets/coin1.wav")
+        self.activate_sound = arcade.load_sound("Assets/coin1.wav")
         self.jump_sound = arcade.load_sound("Assets/Jump.wav")
-        self.game_over = arcade.load_sound("Assets/gameover1.mp3")
+        self.game_over = arcade.load_sound("Assets/gameover1.wav")
         self.gun_sound = arcade.load_sound("Assets/pew.mp3")
 
-        self.level = 4
+        self.level = 1
 
     def setup(self, level):
         """ Set up the game here. Call this function to restart the game. """
