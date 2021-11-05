@@ -128,13 +128,13 @@ class GameOverView(arcade.View):
 
         # takes you to menu
         if self.selected == 1:
-            arcade.draw_text("Menu", 485, 285, arcade.csscolor.WHITE, 75)
+            arcade.draw_text("Menu", 545, 285, arcade.csscolor.WHITE, 75)
         else:
-            arcade.draw_text("Menu", 500, 300, arcade.csscolor.WHITE, 50)
+            arcade.draw_text("Menu", 520, 285, arcade.csscolor.WHITE, 50)
 
         # takes you to quit the game
         if self.selected == 2:
-            arcade.draw_text("Quit", 505, 215, arcade.csscolor.WHITE, 75)
+            arcade.draw_text("Quit", 545, 215, arcade.csscolor.WHITE, 75)
         else:
             arcade.draw_text("Quit", 520, 230, arcade.csscolor.WHITE, 50)
 
@@ -177,7 +177,7 @@ class GameWinView(arcade.View):
     def __init__(self):
         """ This is run once when we switch to this view """
         super().__init__()
-        self.texture = arcade.load_texture("Assets/gamescreen.png")
+        self.texture = arcade.load_texture("Assets/gamescreen1.png")
 
         # Reset the viewport, necessary if we have a scrolling game and we need
         # to reset the viewport back to the start so we can see what we draw.
@@ -188,8 +188,6 @@ class GameWinView(arcade.View):
         """ Draw this view """
         arcade.start_render()
 
-        arcade.draw_text("You Beat The Game You must be good!", 485, 300, arcade.csscolor.WHITE, 75)
-
         arcade.set_viewport(0, SCREEN_WIDTH - 1, 0, SCREEN_HEIGHT - 1)
 
         self.texture.draw_sized(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2,
@@ -197,13 +195,13 @@ class GameWinView(arcade.View):
 
         # takes you to menu
         if self.selected == 1:
-            arcade.draw_text("Menu", 485, 285, arcade.csscolor.WHITE, 75)
+            arcade.draw_text("Menu", 545, 285, arcade.csscolor.WHITE, 75)
         else:
-            arcade.draw_text("Menu", 500, 300, arcade.csscolor.WHITE, 50)
+            arcade.draw_text("Menu", 520, 285, arcade.csscolor.WHITE, 50)
 
         # takes you to quit the game
         if self.selected == 2:
-            arcade.draw_text("Quit", 505, 215, arcade.csscolor.WHITE, 75)
+            arcade.draw_text("Quit", 545, 215, arcade.csscolor.WHITE, 75)
         else:
             arcade.draw_text("Quit", 520, 230, arcade.csscolor.WHITE, 50)
 
@@ -400,7 +398,7 @@ class GameView(arcade.View):
         self.game_over = arcade.load_sound("Assets/gameover1.wav")
         self.gun_sound = arcade.load_sound("Assets/pew.mp3")
 
-        self.level = 1
+        self.level = 3
 
     def setup(self, level):
         """ Set up the game here. Call this function to restart the game. """
@@ -847,7 +845,7 @@ class GameView(arcade.View):
 
             # Load the next level
             if self.level > LEVELS:
-                view = GameOverView()
+                view = GameWinView()
                 self.level = LEVELS
                 self.window.show_view(view)
             else:
