@@ -398,7 +398,7 @@ class GameView(arcade.View):
         self.game_over = arcade.load_sound("Assets/gameover1.wav")
         self.gun_sound = arcade.load_sound("Assets/pew.mp3")
 
-        self.level = 3
+        self.level = 1
 
     def setup(self, level):
         """ Set up the game here. Call this function to restart the game. """
