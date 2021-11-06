@@ -560,12 +560,16 @@ class GameView(arcade.View):
         self.light_layer.draw(ambient_color=AMBIENT_COLOR)
         if self.score == 4:
             self.health_texture = arcade.load_texture("Tiles/Health/Heart.png")
+            # arcade.draw_text("4", 100 + self.view_left, 40 + self.view_bottom, arcade.csscolor.WHITE, 80)
         elif self.score == 3:
             self.health_texture = arcade.load_texture("Tiles/Health/Heart1.png")
+            # arcade.draw_text("3", 100 + self.view_left, 40 + self.view_bottom, arcade.csscolor.WHITE, 80)
         elif self.score == 2:
             self.health_texture = arcade.load_texture("Tiles/Health/Heart2.png")
+            # arcade.draw_text("2", 100 + self.view_left, 40 + self.view_bottom, arcade.csscolor.WHITE, 80)
         elif self.score == 1:
             self.health_texture = arcade.load_texture("Tiles/Health/Heart3.png")
+            # arcade.draw_text("1", 100 + self.view_left, 40 + self.view_bottom, arcade.csscolor.WHITE, 80)
         else:
             pass
 
@@ -577,7 +581,6 @@ class GameView(arcade.View):
         if self.level == 2:
             arcade.draw_text("To Beat The Game You Must Find A Portal in This Huge Map", 500, 3072, arcade.csscolor.WHITE, 20)
             arcade.draw_text("The Torch is here", 800, 2950, arcade.csscolor.WHITE, 20)
-
 
         # Draw our health on the screen, scrolling it with the character
         self.health_texture.draw_sized(100 + self.view_left, 40 + self.view_bottom, 200, 80)
